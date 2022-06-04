@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @author jcvsa
  */
 @Entity
-@Table(name = "C_User")
+@Table(name = "M_User")
 @IdClass(value = UserPK.class)
 public class User implements Serializable {
 

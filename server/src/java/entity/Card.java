@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
  * @author jcvsa
  */
 @Entity
-@Table(name = "C_Card")
+@Table(name = "M_Card")
 @IdClass(value = CardPK.class)
 public class Card implements Serializable {
 
@@ -32,35 +32,38 @@ public class Card implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Integer id;
     @Column(name = "name")
     private String name;
     @Column(name = "description")
     private String description;
     @Column(name = "user")
     private String user;
+    @Column(name = "rating")
+    private Integer rating;
     @Column(name = "dateAcquired")
     private LocalDateTime dateAcquired;
 
     public Card() {
     }
 
-    public Card(String name, String description) {
+    public Card(String name, String description, Integer rating) {
         this.name = name;
         this.description = description;
+        this.rating = rating;
     }
 
     /**
      * @return the id
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -107,6 +110,20 @@ public class Card implements Serializable {
     }
 
     /**
+     * @return the rating
+     */
+    public Integer getRating() {
+        return rating;
+    }
+
+    /**
+     * @param rating the rating to set
+     */
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    /**
      * @return the dateAcquired
      */
     public String getDateAcquired() {
@@ -124,11 +141,14 @@ public class Card implements Serializable {
 
     public JsonObject getJSONObject() {
         JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
-        jsonBuilder.add("id", id);
+        jsonBuilder.add("id", getId());
         jsonBuilder.add("name", name);
         jsonBuilder.add("description", description);
-        jsonBuilder.add("user", user);
-        jsonBuilder.add("dateAcquired", getDateAcquired());
+        if (user != null)
+            jsonBuilder.add("user", user);
+        if (dateAcquired != null)
+            jsonBuilder.add("dateAcquired", getDateAcquired());
+        
         return jsonBuilder.build();
     }
 

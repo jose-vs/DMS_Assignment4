@@ -12,9 +12,9 @@ import java.io.Serializable;
  */
 public class CardPK implements Serializable {
 
-    public String id;
+    public Integer id;
 
-    public CardPK(String id) {
+    public CardPK(Integer id) {
         this.id = id;
     }
 
