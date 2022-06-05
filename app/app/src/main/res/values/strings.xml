@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">app</string>
+    <string name="app_name">Card Trading App</string>
+    <string name="title_home">Available Cards</string>
+    <string name="title_dashboard">Cards Owned</string>
+    <string name="title_notifications">Retrieve Cards</string>
+
+    <!-- errors -->
+    <string name="field_required">This field is required</string>
+    <string name="title_activity_login">LoginActivity</string>
+
+    <string name="element_text">Element</string>
+    <string name="enter_title_of_blog">enter title of blog</string>
+    <string name="enter_blog_content">enter blog content</string>
+
+    <string name="submit">submit</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
