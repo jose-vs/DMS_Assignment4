@@ -52,6 +52,11 @@ public class Card implements Serializable {
         this.description = description;
         this.rating = rating;
     }
+    
+    public void resetCard() { 
+        this.dateAcquired = null; 
+        this.user = null;
+    }
 
     /**
      * @return the id

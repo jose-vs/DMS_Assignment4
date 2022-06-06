@@ -6,12 +6,15 @@ package api;
 
 import entity.Card;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
 import jakarta.ejb.EJB;
 import jakarta.inject.Named;
 import jakarta.jms.Connection;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageConsumer;
 import jakarta.jms.MessageProducer;
 import jakarta.jms.Session;
 import jakarta.ws.rs.Path;
@@ -24,11 +27,16 @@ import jakarta.json.JsonObjectBuilder;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,9 +49,10 @@ public class CardResource {
     @EJB
     private CardBean cardBean;
 
-    private Connection conn;
-    private Session session;
-    private MessageProducer producer;
+    private Connection sendingConn, receivingConn;
+    private Session sendSession, receivingSession;
+
+    private Logger logger;
 
     @Resource(mappedName = "jms/ConnectionFactory")
     private ConnectionFactory connectionFactory;
@@ -51,22 +60,56 @@ public class CardResource {
     private Queue queue;
 
     public CardResource() {
+        logger = Logger.getLogger(getClass().getName());
     }
 
     @PostConstruct
-    public void prepareToSendMessage() {
-        try {
-            // obtain a connection to the JMS provider
-            conn = connectionFactory.createConnection();
-            // obtain an untransacted context for producing messages
-            session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            // obtain a producer of messages to send to the queue
-            producer = session.createProducer(queue);
-        } catch (JMSException e) {
-            System.err.println("Unable to open connection: " + e);
+    public void setupJMSSessions() {
+        if (connectionFactory == null) {
+            logger.warning("Dependency injection of jms/ConnectionFactory failed");
+        } else {
+            try {
+                // obtain a connection to the JMS provider
+                sendingConn = connectionFactory.createConnection();
+                // obtain an untransacted context for producing messages
+                sendSession = sendingConn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+                // obtain a connection to the JMS provider
+                receivingConn = connectionFactory.createConnection();
+                // obtain an untransacted context for producing messages
+                receivingSession = receivingConn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                logger.info("Dependency injection of jms/ConnectionFactory was successful");
+            } catch (JMSException e) {
+                logger.log(Level.WARNING, "Error while creating sessions: {0}", e);
+            }
+        }
+        if (queue == null) {
+            logger.warning("Dependency injection of jms/MessageQueue failed");
+        } else {
+            logger.info("Dependency injection of jms/MessageQueue was successful");
         }
     }
-    
+
+    @PreDestroy
+    public void closeJMSSessions() {
+        try {
+            if (receivingSession != null) {
+                receivingSession.close();
+            }
+            if (receivingConn != null) {
+                receivingConn.close();
+            }
+            if (sendSession != null) {
+                sendSession.close();
+            }
+            if (sendingConn != null) {
+                sendingConn.close();
+            }
+        } catch (JMSException e) {
+            logger.log(Level.WARNING, "Unable to close connection: {0}", e);
+        }
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllCardsJSON() {
@@ -81,7 +124,7 @@ public class CardResource {
 
         return json.toString();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{user}")
@@ -97,13 +140,40 @@ public class CardResource {
 
         return json.toString();
     }
-    
-    
+
     /**
-     * used to add cards to the database
-     * 
-     * @param formParams 
+     * done while being sent to another user and stored in the queue
+     *
+     * @param cardPK
+     * @param user
      */
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("{id}/{user}")
+    public void resetCard(@PathParam("id") Integer cardPK, @PathParam("user") String user) {
+        Card card = cardBean.resetCard(user, cardPK);
+        sendMessage("[Card Sent]/" + cardPK + "/" + card.getName() + "/" + user);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("{id}")
+    public void updateCard(MultivaluedMap<String, String> formParams, @PathParam("id") Integer cardPK) {
+        String user = formParams.getFirst("user");
+        cardBean.updateCard(user, cardPK);
+    }
+
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("{user}")
+    public void retrieveCard(@PathParam("user") String user) {
+        List<Integer> cardPKList = retrieveMessage();
+        
+        for (Integer pk : cardPKList) { 
+            cardBean.updateCard(user, pk);
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addNewCard(MultivaluedMap<String, String> formParams) {
@@ -115,12 +185,41 @@ public class CardResource {
 
     private void sendMessage(String msg) {
         try {
-            TextMessage message = session.createTextMessage();
+            MessageProducer producer = sendSession.createProducer(queue);
+            TextMessage message = sendSession.createTextMessage();
             message.setText(msg);
             producer.send(message);
         } catch (JMSException e) {
             System.err.println("message failed to send: " + e);
         }
+    }
 
+    private List<Integer> retrieveMessage() {
+        
+        List<Integer> cardPKList = new ArrayList<>(); 
+        try {
+
+            MessageConsumer consumer = receivingSession.createConsumer(queue);
+            receivingConn.start();
+            Message nextMessage = null;
+            do {
+                nextMessage = consumer.receive(1000); // 1000ms timeout
+                if (nextMessage != null && nextMessage instanceof TextMessage) {
+                    String textContent = ((TextMessage) nextMessage).getText();
+                    logger.log(Level.INFO, "Received text message from queue: {0}", textContent);
+                    
+                    //parse message
+                    String[] msg = textContent.split("/");
+                    cardPKList.add(Integer.parseInt(msg[1]));
+                }
+
+            } while (nextMessage != null);
+
+        } catch (JMSException e) {
+            logger.log(Level.WARNING, "Error while receiving messages: {0}", e);
+        }
+
+        return cardPKList;
+        
     }
 }

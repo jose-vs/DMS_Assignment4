@@ -39,10 +39,20 @@ public class CardBean {
         return card;
     }
 
+    public Card resetCard(String user, Integer id) {
+        CardPK pk = new CardPK(id);
+        Card cardEdit = (Card) entityManager.find(Card.class, pk);
+        entityManager.merge(cardEdit);
+        cardEdit.resetCard();
+
+        return cardEdit;
+    }
+    
     public Card updateCard(String user, Integer id) {
         CardPK pk = new CardPK(id);
         Card cardEdit = (Card) entityManager.find(Card.class, pk);
         cardEdit.setUser(user);
+        cardEdit.updateDateAcquired();
         entityManager.merge(cardEdit);
 
         return cardEdit;
