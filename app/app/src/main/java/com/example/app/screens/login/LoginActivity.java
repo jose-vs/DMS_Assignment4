@@ -1,6 +1,6 @@
 package com.example.app.screens.login;
 
-import static com.example.app.data.Variables.API_URL;
+import static com.example.app.data.Utility.API_URL;
 
 import android.content.Intent;
 import android.os.Bundle;

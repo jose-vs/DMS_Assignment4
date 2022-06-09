@@ -1,6 +1,6 @@
 package com.example.app.screens.register;
 
-import static com.example.app.data.Variables.API_URL;
+import static com.example.app.data.Utility.API_URL;
 
 import android.os.Bundle;
 import android.text.TextUtils;

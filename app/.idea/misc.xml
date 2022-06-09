@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/jcvsa/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_list_item_2.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/drawable-v24/btn_round_primary_bg.xml" value="0.1725" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/drawable-v24/ic_baseline_lock_24.xml" value="0.1725" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/drawable-v24/ic_baseline_primary_bg.xml" value="0.1725" />
@@ -15,15 +16,19 @@
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1725" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/activity_blog.xml" value="0.1890625" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/activity_login.xml" value="0.1890625" />
-        <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/activity_register.xml" value="0.1890625" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/content_main.xml" value="0.2046875" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_available_cards.xml" value="0.26811594202898553" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_available_cards_list.xml" value="0.26811594202898553" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_blank.xml" value="0.26811594202898553" />
+        <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_card_view.xml" value="0.30570652173913043" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_dashboard.xml" value="0.24375" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_movie_detail.xml" value="0.24375" />
+        <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_owned_cards.xml" value="0.27708333333333335" />
+        <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_owned_cards_list.xml" value="0.1" />
+        <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_retrieve_cards.xml" value="0.30570652173913043" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/layout/fragment_retrievecards.xml" value="0.1" />
         <entry key="..\:/Users/jcvsa/Desktop/Uni/DSM/DMS_Assignment4/app/app/src/main/res/menu/nav_menu_bottom.xml" value="0.20364583333333333" />
       </map>

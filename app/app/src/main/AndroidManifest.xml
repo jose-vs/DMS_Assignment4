@@ -22,6 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App"
         tools:targetApi="31">
+        <activity
+            android:name=".screens.setupbluetooth.SetupBluetoothActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.buycards.BuyCardActivity"
+            android:exported="false" />
         <activity android:name=".screens.MainActivity" />
         <activity android:name=".screens.register.RegisterActivity" />
         <activity
