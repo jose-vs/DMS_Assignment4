@@ -78,19 +78,25 @@ public class FetchCardService extends AsyncTask<String, Void, Integer> {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
+                        Map<String, String> card = new HashMap<>();
+
                         String id =  String.valueOf(jsonObject.get("id"));
                         String name = (String) jsonObject.get("name");
                         String description = (String) jsonObject.get("description");
-                        String user = (String) jsonObject.get("user");
-                        String dateAcquired = (String) jsonObject.get("dateAcquired");
-
-                        Map<String, String> card = new HashMap<>();
 
                         card.put("id", id);
                         card.put("name", name);
                         card.put("description", description);
-                        card.put("user", user);
-                        card.put("dateAcquired", dateAcquired);
+
+                        if (jsonObject.has("user") && !jsonObject.isNull("user")) {
+                            String user = (String) jsonObject.get("user");
+                            card.put("user", user);
+                        }
+
+                        if (jsonObject.has("dateAcquired") && !jsonObject.isNull("dateAcquired")) {
+                            String dateAcquired = (String) jsonObject.get("dateAcquired");
+                            card.put("dateAcquired", dateAcquired);
+                        }
 
                         cardList.add(card);
                     }

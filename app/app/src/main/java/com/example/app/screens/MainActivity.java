@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.app.R;
 import com.example.app.screens.buycards.BuyCardActivity;
+import com.example.app.screens.fragments.UserOwnedCardsFragment;
 import com.example.app.screens.setupbluetooth.SetupBluetoothActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,19 +23,8 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Main " + (String) getIntent().getStringExtra("username"));
         setContentView(R.layout.activity_main);
 
-//        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (bluetoothAdapter == null) {
-//            Toast.makeText(this, "Your device does not support bluetooth", Toast.LENGTH_LONG).show();
-//        } else {
-//
-//            if (!bluetoothAdapter.isEnabled()) {
-//                Intent enableBluetooth = new Intent
-//                        (BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//                startActivity(enableBluetooth);
-//            }
-//            else
-//                Toast.makeText(this, "Bluetooth already on", Toast.LENGTH_LONG).show();
-//        }
+
+
 
         Button b1 = (Button) this.findViewById(R.id.buyCards);
         b1.setOnClickListener(v -> {

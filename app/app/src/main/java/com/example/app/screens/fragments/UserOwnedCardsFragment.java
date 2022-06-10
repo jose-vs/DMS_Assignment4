@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.ListFragment;
 
 import com.example.app.R;
 import com.example.app.api.FetchCardService;
+import com.example.app.api.TradeCardService;
 
 import java.util.HashMap;
 
@@ -32,7 +32,8 @@ public class UserOwnedCardsFragment extends ListFragment {
          */
         HashMap<String, String> item = (HashMap<String, String>) l.getAdapter().getItem(position);
 
-        System.out.println(item.get("name"));
+        tradeCard(Integer.valueOf(item.get("id")), item.get("user"));
+
     }
 
     @Override
@@ -42,7 +43,13 @@ public class UserOwnedCardsFragment extends ListFragment {
     }
 
     private void refresh() {
-        new FetchCardService(this).execute(API_URL + "cards/");
+        new FetchCardService(this).execute(API_URL + "cards/ojse");
     }
+
+    private void tradeCard(Integer id, String user) {
+        new TradeCardService().execute(API_URL +"cards/" + id + "/" + user);
+        refresh();
+    }
+
 
 }
